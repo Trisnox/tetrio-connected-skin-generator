@@ -1,5 +1,11 @@
+#!/usr/bin/env python3
+
 import os
+import platform
 from PIL import Image
+from sys import exit
+# minimum 96 pixel, this is for each square that were on connected skin
+
 # GIF unsupported... yet, I hope you enjoy doing this frame by frame
 
 # [x, y], this is size for automatic rotation
@@ -109,8 +115,12 @@ class Skin_gen():
 
         return
 
+    # The least input possible, to generate chunk of block, symetrical
+    def generate_skin_universal(self):
+        pass
 
-    def generate_skin(self):
+    # Standard mino generation, to generate unique individual symetrical pieces
+    def generate_skin_standard(self):
         if not self.images:
             self.open_images()
         
@@ -471,6 +481,12 @@ class Skin_gen():
 
         return canvas
 
+if platform.system() == "Windows":
+    path_slash = '\\'
+else:
+    path_slash = '/'
+
+
 # check if result and disabled is exist
 if os.path.isfile('./result.png') and os.path.isfile('./disabled.png'):
     user_input = input('Result image and disabled mino is found, would you like to merge them? [Y/N]: ').lower()
@@ -513,7 +529,7 @@ elif len(folders) >= 1:
         index = int(index_input) - 1
         if index < 0:
             raise IndexError
-        location = current_folder + "\\" + folders[int(index_input) - 1]
+        location = current_folder + path_slash + folders[int(index_input) - 1]
     except (ValueError, IndexError):
         location = None
 
@@ -523,8 +539,8 @@ while True:
 
     location = location.strip('\"\'')
 
-    if not location.endswith('\\'):
-        location += "\\"
+    if not location.endswith(path_slash):
+        location += path_slash
 
     print('\n')
 
@@ -543,7 +559,7 @@ while True:
     
     break
 
-connected_minos, multiplication_size = gen.generate_skin()
+connected_minos, multiplication_size = gen.generate_skin_standard()
 
 connected_skin = gen.combine_images(connected_minos)
 
