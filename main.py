@@ -6,7 +6,8 @@ from tkinter import filedialog, ttk, colorchooser
 from ext.gen import Skin_gen, ResolutionMismatch, MissingMino
 
 def set_skin_location():
-    location = filedialog.askdirectory(initialdir = './', title = "Select a folder")
+    dir = skin_location.get() if skin_location.get() else './'
+    location = filedialog.askdirectory(initialdir = dir, title = "Select a folder")
     if location:
         skin_location.set(location)
 
@@ -30,48 +31,118 @@ def guess_method(location):
     i = ('i.png', 'i.jpg', 'i.jpeg')
     gb = ('gb.png', 'gb.jpg', 'gb.jpeg')
     gbd = ('gbd.png', 'gbd.jpg', 'gbd.jpeg')
+
+    s1 = ('s1.png', 's1.jpg', 's1.jpeg')
+    s2 = ('s2.png', 's2.jpg', 's2.jpeg')
+    z1 = ('z1.png', 'z1.jpg', 'z1.jpeg')
+    z2 = ('z2.png', 'z2.jpg', 'z2.jpeg')
+    l1 = ('l1.png', 'l1.jpg', 'l1.jpeg')
+    l2 = ('l2.png', 'l2.jpg', 'l2.jpeg')
+    l3 = ('l3.png', 'l3.jpg', 'l3.jpeg')
+    l4 = ('l4.png', 'l4.jpg', 'l4.jpeg')
+    j1 = ('j1.png', 'j1.jpg', 'j1.jpeg')
+    j2 = ('j2.png', 'j2.jpg', 'j2.jpeg')
+    j3 = ('j3.png', 'j3.jpg', 'j3.jpeg')
+    j4 = ('j4.png', 'j4.jpg', 'j4.jpeg')
+    t1 = ('t1.png', 't1.jpg', 't1.jpeg')
+    t2 = ('t2.png', 't2.jpg', 't2.jpeg')
+    t3 = ('t3.png', 't3.jpg', 't3.jpeg')
+    t4 = ('t4.png', 't4.jpg', 't4.jpeg')
+    o1 = ('o1.png', 'o1.jpg', 'o1.jpeg')
+    o2 = ('o2.png', 'o2.jpg', 'o2.jpeg')
+    o3 = ('o3.png', 'o3.jpg', 'o3.jpeg')
+    i1 = ('i1.png', 'i1.jpg', 'i1.jpeg')
+    i2 = ('i2.png', 'i2.jpg', 'i2.jpeg')
+    gb1 = ('gb1.png', 'gb1.jpg', 'gb1.jpeg')
+    gb2 = ('gb2.png', 'gb2.jpg', 'gb2.jpeg')
+    gb3 = ('gb3.png', 'gb3.jpg', 'gb3.jpeg')
+    gbd1 = ('gbd1.png', 'gbd1.jpg', 'gbd1.jpeg')
+    gbd2 = ('gbd2.png', 'gbd2.jpg', 'gbd2.jpeg')
+    gbd3 = ('gbd3.png', 'gbd3.jpg', 'gbd3.jpeg')
     files = os.listdir(location)
-    found = []
-    missing = []
+    found1 = []
+    found2 = []
+    found3 = []
+    found4 = []
+    missing1 = []
+    missing2 = []
+    missing3 = []
+    missing4 = []
 
     method_1 = (s, t, o, i)
     method_2 = (s, z, l, j, t, o, i, gb, gbd)
-    # method 3 is very simple, just check on single file
-    # we'll then handle the missing and optional at the skin checking
+    method_3 = (s1, s2, t1, t2, t3, t4, o1, i1, i2)
+    method_4 = (s1, s2, z1, z2, l1, l2, l3, l4, j1, j2, j3, j4, t1, t2, t3, t4, o1, o2, o3, i1, i2, gb1, gb2, gb3, gbd1, gbd2, gbd3)
 
     while True:
         for x, y, z in method_2:
             if x in files:
-                found.append(x)
+                found2.append(x)
             elif y in files:
-                found.append(y)
+                found2.append(y)
             elif z in files:
-                found.append(z)
+                found2.append(z)
             else:
-                missing.append(x)
+                missing2.append(x)
+                # break
+                # faster but doesn't give info on what else is missing
 
-        if missing:
-            missing = []
-        else:
-            return 3, found
+        if not missing2:
+            return 3, found2
 
         for x, y, z in method_1:
             if x in files:
-                found.append(x)
+                found1.append(x)
             elif y in files:
-                found.append(y)
+                found1.append(y)
             elif z in files:
-                found.append(z)
+                found1.append(z)
             else:
-                missing.append(x)
+                missing1.append(x)
+                # break
         
-        if missing:
-            if len(found) <= 0:
-                raise MissingMino("Can't find a single file with correct name keys.", ())
+        if not missing1:
+            return 2, found1
+        
+        for x, y, z in method_4:
+            if x in files:
+                found4.append(x)
+            elif y in files:
+                found4.append(y)
+            elif z in files:
+                found4.append(z)
             else:
-                raise MissingMino('One or more mino are missing', missing)
+                missing4.append(x)
+                # break
+
+        if not missing4:
+            return 5, found4
+        
+        for x, y, z in method_3:
+            if x in files:
+                found3.append(x)
+            elif y in files:
+                found3.append(y)
+            elif z in files:
+                found3.append(z)
+            else:
+                missing3
+        
+        if not missing3:
+            return 4, found3
+
+        if len([*found1, *found2, *found3, *found4]) <= 0:
+            raise MissingMino("Can't find a single file with correct name keys.", ())
         else:
-            return 2, found
+            text = 'These files are missing for the following method:\n'
+            if not len(missing1) == 4:
+                text += "Universal:\n" + '\n'.join(missing1)
+            if not len(missing2) == 9:
+                text += "\n\nStandard:\n" + '\n'.join(missing2)
+            if not len(missing3) == 27:
+                text += "\n\nAdvanced:\n" + '\n'.join(missing3)
+
+            raise MissingMino(text, ())
 
 def generate_skin():
     for x in mainframe.winfo_children():
@@ -107,12 +178,6 @@ def generate_skin():
 
         config['method'] = method
         config['automatic'] = files
-    
-    # this won't be necessary anymore on v1.0.0
-    if method == 4:
-        pop_up_revert_state('Advanced method is not yet available.')
-        generate_button.config(text = 'Generate')
-        return
 
     gen = Skin_gen(**config)
 
@@ -254,7 +319,8 @@ if __name__ == "__main__":
         "Automatic": 1,
         "Universal": 2,
         "Standard": 3,
-        "Advanced": 4
+        "Mixed": 4,
+        "Advanced": 5
     }
 
     future_row1 = 4
@@ -266,15 +332,14 @@ if __name__ == "__main__":
     color_choice_button = ttk.Button(mainframe, text = "Flat Color", command = lambda:color_picker())
     color_choice_button.grid(row = 6, column = 2)
 
-    ttk.Label(mainframe, text = '').grid(row = 9, column = 2)
-
+    ttk.Label(mainframe, text = '').grid(row = 10, column = 2)
 
     generate_button = ttk.Button(mainframe, text = 'Generate', command = lambda:generate_skin())
-    generate_button.grid(row = 10, column = 1)
+    generate_button.grid(row = 11, column = 1)
 
 
     merge_button = ttk.Button(mainframe, text = 'Merge', command = lambda:merge_skin())
-    merge_button.grid(row = 10, column = 3)
+    merge_button.grid(row = 11, column = 3)
 
 
     ttk.Radiobutton(mainframe, text = 'Yes', value = 1, variable = export_downscaled).grid(row = 5, column = 3)
@@ -283,7 +348,7 @@ if __name__ == "__main__":
     ttk.Label(mainframe, text = '').grid(row = 11, column = 2)
 
 
-    ttk.Label(mainframe, text = 'version: 0.2.0', foreground = '#00FF00').grid(row = 12, column = 1, sticky=tk.W+tk.S)
+    ttk.Label(mainframe, text = 'version: 1.0.0', foreground = '#00FF00').grid(row = 13, column = 1, sticky=tk.W+tk.S)
 
     for x in mainframe.winfo_children(): 
         x.grid_configure(padx=5, pady=5)
