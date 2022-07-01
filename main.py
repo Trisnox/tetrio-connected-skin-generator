@@ -348,7 +348,7 @@ if __name__ == "__main__":
     ttk.Label(mainframe, text = '').grid(row = 11, column = 2)
 
 
-    ttk.Label(mainframe, text = 'version: 1.0.0', foreground = '#00FF00').grid(row = 13, column = 1, sticky=tk.W+tk.S)
+    ttk.Label(mainframe, text = 'version: 1.1.0', foreground = '#00FF00').grid(row = 13, column = 1, sticky=tk.W+tk.S)
 
     for x in mainframe.winfo_children(): 
         x.grid_configure(padx=5, pady=5)

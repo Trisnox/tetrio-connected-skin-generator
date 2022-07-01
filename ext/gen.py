@@ -394,16 +394,19 @@ class Skin_gen():
                 canvas.paste(block_3, matrix[4])
                 canvas.paste(block_4, matrix[9])
 
-                # automatic rotation, the catch? piece is trivial in each rotation
-                # non trivial ones are like puyo puyo/four.lol/default connected on tetr.io/res and etc
                 canvas.paste(block_1.rotate(90), matrix[8])
                 canvas.paste(block_4.rotate(90), matrix[10])
                 canvas.paste(block_2.rotate(90), matrix[1])
                 canvas.paste(block_3.rotate(90), matrix[3])
 
-                # beyond canvas.paste is basically generate everything else that were necessary
-                # through splicing image, of course the result won't be much satisfying for non trivial ones
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
+
+                    singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+
+                canvas.paste(singular, matrix[19])
 
                 singular.paste(block_3.crop((0, 0, int(s/2), s)), (0, 0))
                 singular.paste(block_2.crop((int(s/2), 0, s, s)), (int(s/2), 0))
@@ -427,40 +430,14 @@ class Skin_gen():
                 canvas.paste(block_3.rotate(90*2), matrix[16])
                 canvas.paste(block_3.rotate(90*3), matrix[18])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
-                canvas.paste(singular, matrix[19])
-
-                straight_mino = Image.new('RGBA', (48*m, 48*m))
-
-                straight_mino.paste(block_4.crop((0, 0, int(s/2), s)), (0,0))
-                straight_mino.paste(block_2.crop((int(s/2), 0, s, s)), (int(s/2),0))
-
-                canvas.paste(straight_mino, matrix[5])
-                canvas.paste(straight_mino.rotate(90), matrix[2])
-
-                corner_turn = Image.new('RGBA', (96*m, 96*m))
-
-                corner = Image.new('RGBA', (48*m, 48*m))
-
-                corner.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
-                corner.paste(block_2.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
-                corner.paste(block_1.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
-
-                corner_turn.paste(block_3, matrix[2])
-                corner_turn.paste(block_3, matrix[21])
-                corner_turn.paste(block_3.rotate(180), matrix[1])
-                corner_turn.paste(block_3.rotate(180), matrix[11])
-                
-                canvas.paste(corner_turn, matrix[7])
-
-                canvas.paste(corner, matrix[7], corner)
-                canvas.paste(corner.rotate(90), matrix[8], corner.rotate(90))
-                canvas.paste(corner.rotate(90*2), matrix[9], corner.rotate(90*2))
-                canvas.paste(corner.rotate(90*3), matrix[10], corner.rotate(90*3))
+                    canvas.paste(singular, matrix[19])
 
             elif x == 2: # o
                 block_1 = img.crop(crop_matrix[1])
@@ -473,24 +450,16 @@ class Skin_gen():
                 canvas.paste(block_3, matrix[13])
                 canvas.paste(block_4, matrix[14])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
-                singular.paste(block_4.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
-                singular.paste(block_2.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
-                singular.paste(block_3.crop((int(s/2), int(s/2), s, s)), (int(s/2), int(s/2)))
+                    singular.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
+                    singular.paste(block_2.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
+                    singular.paste(block_3.crop((int(s/2), int(s/2), s, s)), (int(s/2), int(s/2)))
 
-                ending_cap = Image.new('RGBA', (48*m, 48*m))
-
-                ending_cap.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
-                ending_cap.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
-
-                canvas.paste(ending_cap, matrix[1])
-                canvas.paste(ending_cap.rotate(180), matrix[3])
-                canvas.paste(ending_cap.rotate(-90), matrix[6])
-                canvas.paste(ending_cap.rotate(90), matrix[4])
-
-                canvas.paste(singular, matrix[19])
+                    canvas.paste(singular, matrix[19])
 
             elif x == 3: # i
                 block_1 = img.crop(crop_matrix[1])
@@ -505,13 +474,15 @@ class Skin_gen():
                 canvas.paste(block_2.rotate(90), matrix[2])
                 canvas.paste(block_3.rotate(90), matrix[1])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_3.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_3.crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
-                canvas.paste(singular, matrix[19])
-                
+                    canvas.paste(singular, matrix[19])
+
         return canvas
 
     def generate_garbage_single(self, img):
@@ -624,10 +595,12 @@ class Skin_gen():
                 canvas.paste(block_2.rotate(90), matrix[1])
                 canvas.paste(block_3.rotate(90), matrix[3])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('s_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_3.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_2.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_3.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_2.crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
                 canvas.paste(singular, matrix[19])
 
@@ -649,10 +622,12 @@ class Skin_gen():
                 canvas.paste(block_4.rotate(90), matrix[1])
                 canvas.paste(block_1.rotate(90), matrix[3])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('z_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
                 canvas.paste(singular, matrix[19])
 
@@ -677,10 +652,12 @@ class Skin_gen():
                 canvas.paste(block_4.rotate(90*2), matrix[7])
                 canvas.paste(block_4.rotate(90*3), matrix[8])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('l_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_1.rotate(-90).crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_1.rotate(-90).crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
                 canvas.paste(singular, matrix[19])
 
@@ -705,10 +682,12 @@ class Skin_gen():
                 canvas.paste(block_2.rotate(90*2), matrix[10])
                 canvas.paste(block_2.rotate(90*3), matrix[7])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('j_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
-                singular.paste(block_1.rotate(90).crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_1.rotate(90).crop((0, 0, int(s/2), s)), (0, 0))
 
                 canvas.paste(singular, matrix[19])
 
@@ -731,10 +710,12 @@ class Skin_gen():
                 canvas.paste(block_3.rotate(90*2), matrix[16])
                 canvas.paste(block_3.rotate(90*3), matrix[18])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('t_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_2.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
                 canvas.paste(singular, matrix[19])
 
@@ -779,12 +760,16 @@ class Skin_gen():
                 canvas.paste(block_3, matrix[13])
                 canvas.paste(block_4, matrix[14])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('o_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
-                singular.paste(block_4.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
-                singular.paste(block_2.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
-                singular.paste(block_3.crop((int(s/2), int(s/2), s, s)), (int(s/2), int(s/2)))
+                    singular.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
+                    singular.paste(block_4.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
+                    singular.paste(block_2.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
+                    singular.paste(block_3.crop((int(s/2), int(s/2), s, s)), (int(s/2), int(s/2)))
+
+                canvas.paste(singular, matrix[19])
 
                 ending_cap = Image.new('RGBA', (48*m, 48*m))
 
@@ -795,8 +780,6 @@ class Skin_gen():
                 canvas.paste(ending_cap.rotate(180), matrix[3])
                 canvas.paste(ending_cap.rotate(-90), matrix[6])
                 canvas.paste(ending_cap.rotate(90), matrix[4])
-
-                canvas.paste(singular, matrix[19])
 
                 minos.append(canvas)
 
@@ -813,10 +796,12 @@ class Skin_gen():
                 canvas.paste(block_2.rotate(90), matrix[2])
                 canvas.paste(block_3.rotate(90), matrix[1])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                singular = self.optional.get('i_singular', None)
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
 
-                singular.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
-                singular.paste(block_3.crop((int(s/2), 0, s, s)), (int(s/2), 0))
+                    singular.paste(block_1.crop((0, 0, int(s/2), s)), (0, 0))
+                    singular.paste(block_3.crop((int(s/2), 0, s, s)), (int(s/2), 0))
 
                 canvas.paste(singular, matrix[19])
 
@@ -856,12 +841,18 @@ class Skin_gen():
                 canvas.paste(bar, matrix[4])
                 canvas.paste(bar_vert, matrix[1])
 
-                singular = Image.new('RGBA', (48*m, 48*m))
+                if x == 7:
+                    singular = self.optional.get('gb_singular', None)
+                else:
+                    singular = self.optional.get('gbd_singular', None)
 
-                singular.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
-                singular.paste(block_3.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
-                singular.paste(block_7.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
-                singular.paste(block_9.crop((int(s/2), int(s/2), s, s)), (int(s/2), int(s/2)))
+                if not singular:
+                    singular = Image.new('RGBA', (48*m, 48*m))
+
+                    singular.paste(block_1.crop((0, 0, int(s/2), int(s/2))), (0, 0))
+                    singular.paste(block_3.crop((int(s/2), 0, s, int(s/2))), (int(s/2), 0))
+                    singular.paste(block_7.crop((0, int(s/2), int(s/2), s)), (0, int(s/2)))
+                    singular.paste(block_9.crop((int(s/2), int(s/2), s, s)), (int(s/2), int(s/2)))
 
                 canvas.paste(singular, matrix[19])
 
