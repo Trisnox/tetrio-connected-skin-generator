@@ -102,17 +102,17 @@ class Skin_gen():
             alt_gb1 = self.optional.get('3x3_1', None)
             alt_gb2 = self.optional.get('3x3_2', None)
             alt_gb3 = self.optional.get('3x3_3', None)
-            singular = self.optional.get('singular', None)
-            if any((alt_gb1, alt_gb2, alt_gb3)):
-                if sum([alt_gb1, alt_gb2, alt_gb3]) == 0:
+            singular = self.optional.get('gb_singular', None)
+            if any((alt_gb1, alt_gb2, alt_gb3, singular)):
+                if not alt_gb1 and not alt_gb2 and not alt_gb3 and not singular:
                     pass
-                elif sum([alt_gb1, alt_gb2, alt_gb3]) != 3:
-                    print('You attempted to create a skin for garbage, but 1 or more garbage image is missing. All of 3x3 image must be present.')
+                elif not all((alt_gb1, alt_gb2, alt_gb3, singular)):
+                    print('You attempted to create a skin for garbage, but 1 or more garbage image is missing. All of 3x3 image and gb_singular must be present.')
                     garbage = skin.crop((0, 0, 192 * m, 192 * m))
                     res['garbage.png'] = garbage
                 else:
                     garbage = Image.new('RGBA', (192*m, 192*m))
-                    garbage.paste(alt_gb1, (48*m, 0))
+                    garbage.paste(alt_gb1, (48*m, 0), alt_gb1)
                     garbage.paste(alt_gb2, (48*m, 144*m), alt_gb2)
                     garbage.paste(alt_gb3, (0, 0), alt_gb3)
                     garbage.paste(singular, (0, 144*m))
@@ -237,7 +237,7 @@ class Skin_gen():
             optional = (disabled, s_singular, z_singular, l_singular, j_singular, t_singular, o_singular, i_singular, gb_singular, gbd_singular)
         elif self.method == 4: # mixed
             method = (s1, s2, t1, t2, t3, t4, o1, i1, i2)
-            optional = (alt_gb1, alt_gb2, alt_gb3, singular)
+            optional = (alt_gb1, alt_gb2, alt_gb3, gb_singular, singular)
         else: # advanced
             method = (s1, s2, z1, z2, l1, l2, l3, l4, j1, j2, j3, j4, t1, t2, t3, t4, o1, o2, o3, i1, i2, gb1, gb2, gb3, gbd1, gbd2, gbd3)
             optional = (disabled, s_singular, z_singular, l_singular, j_singular, t_singular, o_singular, i_singular, gb_singular, gbd_singular, t5, t6, t7, t8, t9, t10)
@@ -306,7 +306,7 @@ class Skin_gen():
         for x in self.name_keys:
             file_name = x
             x = self.location + x
-            i = Image.open(x)
+            i = Image.open(x).convert('RGBA')
             self.images.append(i)
 
             w, h = i.size
@@ -324,7 +324,7 @@ class Skin_gen():
         for x, y in self.optional.items():
             file_name = y
             y = self.location + y
-            i = Image.open(y)
+            i = Image.open(y).convert('RGBA')
             self.optional[x] = i
 
             w, h = i.size
