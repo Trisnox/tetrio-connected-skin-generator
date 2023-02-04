@@ -70,6 +70,7 @@ If you require further assistance, you can contact me through my discord (K·#49
 # to-do
 - Possibly a support for GIF format.
 - Possibly a web.
+- A generation method from just a singular block
 
 # Notes
 GUI will autofill the `Skin location` if there's only a single folder inside the directory. This, however, does not have checks unlike the CLI version.
